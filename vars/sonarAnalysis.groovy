@@ -31,7 +31,7 @@ def shouldAbortPipeline(boolean abortPipeline, String branchName) {
     }
 
 
-    if (branchName == 'master' || branchName.startsWith('hotfix/')) {
+    if (branchName.startsWith('hotfix/')) {
         return true
     }
 
