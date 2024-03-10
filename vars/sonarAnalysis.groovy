@@ -1,4 +1,4 @@
-def call(boolean abortPipeline = false) {
+def call(boolean abortPipeline = false, String branchName = env.BRANCH_NAME) {
     
     def scannerHome = tool 'sonar-scanner'
     withEnv(["PATH+SONAR=${scannerHome}/bin"]) {
@@ -11,13 +11,27 @@ def call(boolean abortPipeline = false) {
         """
     }
 
-timeout(time: 5, unit: 'MINUTES') {
-    if (abortPipeline) {
-        currentBuild.result = 'FAILURE'
-        echo 'El QualityGate ha fallado. Cerrando el pipeline.'
-        error 'El QualityGate ha fallado. Cerrando el pipeline.'
-    } else {
-        echo 'El QualityGate ha pasado. Continuando con el pipeline.'
+    
+    script {
+        timeout(time: 10, unit: 'MINUTES') {
+            
+            if (shouldAbortPipeline(abortPipeline, branchName)) {
+                error 'QualityGate ha fallado. Abortando el pipeline.'
+            } else {
+                echo 'QualityGate ha sido superado. Continuando con el pipeline.'
+            }
+        }
     }
 }
+
+def shouldAbortPipeline(boolean abortPipeline, String branchName) {
+    if (abortPipeline) {
+        return true
+    }
+
+    if (branchName == 'master' || branchName.startsWith('hotfix/')) {
+        return true
+    }
+
+    return false
 }
