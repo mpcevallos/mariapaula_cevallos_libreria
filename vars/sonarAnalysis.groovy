@@ -1,5 +1,5 @@
 def call(boolean abortPipeline = false) {
-    // Lanza el sonar-scanner con la configuración por defecto
+    
     def scannerHome = tool 'sonar-scanner'
     withEnv(["PATH+SONAR=${scannerHome}/bin"]) {
         sh """
@@ -11,12 +11,12 @@ def call(boolean abortPipeline = false) {
         """
     }
 
-    // Evalua el QualityGate de SonarQube y decide si abortar el pipeline o no
-    timeout(time: 5, unit: 'MINUTES') {
-        if (abortPipeline) {
-            error 'El QualityGate ha fallado. Cerrando el pipeline.'
-        } else {
-            echo 'El QualityGate ha pasado. Continuando con el pipeline.'
-        }
+timeout(time: 5, unit: 'MINUTES') {
+    if (abortPipeline) {
+        currentBuild.result = 'FAILURE'
+        echo 'El QualityGate ha fallado. Cerrando el pipeline.'
+        error 'El QualityGate ha fallado. Cerrando el pipeline.'
+    } else {
+        echo 'El QualityGate ha pasado. Continuando con el pipeline.'
     }
 }
