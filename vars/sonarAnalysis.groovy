@@ -18,7 +18,7 @@ def call(Map params) {
     }
 
     script {
-        timeout(time: 1, unit: 'MINUTES') {
+        timeout(time: 10, unit: 'MINUTES') {
             if (shouldAbortPipeline(abortPipeline, branchName)) {
                 error 'QualityGate ha fallado. Abortando el pipeline.'
             } else {
