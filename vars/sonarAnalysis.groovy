@@ -20,3 +20,4 @@ timeout(time: 5, unit: 'MINUTES') {
         echo 'El QualityGate ha pasado. Continuando con el pipeline.'
     }
 }
+}
