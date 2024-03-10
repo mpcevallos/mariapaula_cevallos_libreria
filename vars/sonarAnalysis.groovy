@@ -3,7 +3,7 @@ def call(Map params) {
     // Accede a los parámetros usando params.abortPipeline y params.branchName
 
     def abortPipeline = params.abortPipeline ?: false
-    def branchName = params.branchName ?: 'master'
+    def branchName = params.branchName ?: 'null'
 
     def scannerHome = tool 'sonar-scanner'
     
@@ -29,7 +29,7 @@ def call(Map params) {
 }
 
 def shouldAbortPipeline(boolean abortPipeline, String branchName) {
-    if (branchName == 'master') {
+    if (branchName == 'null') {
         return true
     }
 
