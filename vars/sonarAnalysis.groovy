@@ -25,9 +25,11 @@ def call(boolean abortPipeline = false, String branchName = env.BRANCH_NAME) {
 }
 
 def shouldAbortPipeline(boolean abortPipeline, String branchName) {
-    if (abortPipeline) {
+    
+    if (branchName == 'master') {
         return true
     }
+
 
     if (branchName == 'master' || branchName.startsWith('hotfix/')) {
         return true
